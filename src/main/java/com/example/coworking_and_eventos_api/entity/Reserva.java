@@ -1,0 +1,89 @@
+package com.example.coworking_and_eventos_api.entity;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "reservas", schema = "public")
+public class Reserva {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private Long clienteId;
+
+    @Column(name = "data_inicio_reserva", nullable = false)
+    private LocalDateTime dataInicioReserva;
+
+    @Column(name = "data_fim_reserva", nullable = false)
+    private LocalDateTime dataFimReserva;
+
+    @ManyToOne
+    @JoinColumn(name = "sala_id", nullable = false)
+    private Sala sala;
+
+    public Reserva() {
+    }
+
+    public Reserva(Long id, Long clienteId, LocalDateTime dataInicioReserva, LocalDateTime dataFimReserva, Sala sala) {
+        this.id = id;
+        this.clienteId = clienteId;
+        this.dataInicioReserva = dataInicioReserva;
+        this.dataFimReserva = dataFimReserva;
+        this.sala = sala;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public LocalDateTime getDataInicioReserva() {
+        return dataInicioReserva;
+    }
+
+    public void setDataInicioReserva(LocalDateTime dataInicioReserva) {
+        this.dataInicioReserva = dataInicioReserva;
+    }
+
+    public LocalDateTime getDataFimReserva() {
+        return dataFimReserva;
+    }
+
+    public void setDataFimReserva(LocalDateTime dataFimReserva) {
+        this.dataFimReserva = dataFimReserva;
+    }
+
+    public Sala getSala() {
+        return sala;
+    }
+
+    public void setSala(Sala sala) {
+        this.sala = sala;
+    }
+
+}
