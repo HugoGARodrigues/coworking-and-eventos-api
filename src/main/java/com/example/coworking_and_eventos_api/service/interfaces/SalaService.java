@@ -7,7 +7,7 @@ import com.example.coworking_and_eventos_api.enums.EnumTipoSala;
 
 public interface SalaService {
 
-    public Sala cadastrarSala(Sala sala);
+    public Sala criarSala(Sala sala);
 
     public List<Sala> listarSalas(EnumTipoSala tipoSala);
     

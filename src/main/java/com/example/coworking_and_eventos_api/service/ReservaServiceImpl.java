@@ -27,7 +27,7 @@ public class ReservaServiceImpl implements ReservaService {
     private static final LocalTime FIM_HORARIO_COMERCIAL = LocalTime.of(18, 0);
     
 
-    @Override
+   /*  @Override
     @Transactional
     public Reserva cadastrarReserva(Reserva reserva, Long salaId) {
         validarReserva(salaId, reserva);
@@ -37,7 +37,7 @@ public class ReservaServiceImpl implements ReservaService {
         return reservaRepository.save(reserva);
         
         
-    }
+    } */
 
     @Override
     public void validarReserva(Long salaId, Reserva reserva){
@@ -68,6 +68,7 @@ public class ReservaServiceImpl implements ReservaService {
                 throw new IllegalArgumentException("A sala já está reservada para o período solicitado.");
             }
         }
+    
 
 
     }
