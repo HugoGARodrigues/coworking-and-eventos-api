@@ -3,6 +3,8 @@ package com.example.coworking_and_eventos_api.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.example.coworking_and_eventos_api.enums.EnumStatusAgendamento;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,6 +32,10 @@ public class Reserva {
 
     @Column(name = "data_fim_reserva", nullable = false)
     private LocalDateTime dataFimReserva;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_agendamento", nullable = false)
+    private EnumStatusAgendamento statusAgendamento;
 
     @ManyToOne
     @JoinColumn(name = "sala_id", nullable = false)
@@ -86,4 +92,11 @@ public class Reserva {
         this.sala = sala;
     }
 
+    public EnumStatusAgendamento getStatusAgendamento() {
+        return statusAgendamento;
+    }
+
+    public void setStatusAgendamento(EnumStatusAgendamento statusAgendamento) {
+        this.statusAgendamento = statusAgendamento;
+    }
 }

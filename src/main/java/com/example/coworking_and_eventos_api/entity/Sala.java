@@ -1,7 +1,10 @@
 package com.example.coworking_and_eventos_api.entity;
 
+import java.util.List;
+
 import com.example.coworking_and_eventos_api.enums.EnumTipoSala;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,7 +12,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -25,6 +27,9 @@ public class Sala {
 
     @Column(nullable = false)
     private Integer capacidade;
+
+    @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reserva> reservas;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_sala", nullable = false)
@@ -72,5 +77,12 @@ public class Sala {
         this.tipoSala = tipoSala;
     }
 
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
+    }
     
 }
