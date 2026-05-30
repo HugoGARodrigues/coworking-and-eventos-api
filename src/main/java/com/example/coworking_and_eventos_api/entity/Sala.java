@@ -3,6 +3,8 @@ package com.example.coworking_and_eventos_api.entity;
 import java.util.List;
 
 import com.example.coworking_and_eventos_api.enums.EnumTipoSala;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,7 +31,9 @@ public class Sala {
     @Column(nullable = false)
     private Integer capacidade;
 
+    
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Reserva> reservas;
 
     @Enumerated(EnumType.STRING)

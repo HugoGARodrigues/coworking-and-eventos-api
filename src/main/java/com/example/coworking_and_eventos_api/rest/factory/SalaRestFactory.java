@@ -1,7 +1,6 @@
 package com.example.coworking_and_eventos_api.rest.factory;
 
 import com.example.coworking_and_eventos_api.entity.Sala;
-import com.example.coworking_and_eventos_api.enums.EnumTipoSala;
 import com.example.coworking_and_eventos_api.rest.dto.request.SalaRequestDTO;
 import com.example.coworking_and_eventos_api.rest.dto.response.SalaResponseDTO;
 

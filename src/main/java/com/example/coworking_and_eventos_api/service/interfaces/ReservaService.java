@@ -8,9 +8,7 @@ import com.example.coworking_and_eventos_api.rest.dto.response.AgendaDiariaRespo
 
 public interface ReservaService {
 
-    /* public Reserva cadastrarReserva(Reserva reserva, Long salaId); */
-
-    public void validarReserva(Long salaId, Reserva reserva);
+    public Reserva cadastrarReserva(Reserva reserva, Long salaId) throws Exception;
 
     public void cancelarReserva(Long id);
 

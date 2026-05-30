@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.example.coworking_and_eventos_api.enums.EnumStatusAgendamento;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,8 +25,8 @@ public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
+    //@ManyToOne(fetch = FetchType.LAZY), @JoinColumn(name = "cliente_id", nullable = false), apenas para efeito de mock, ja que nao existe a entidade cliente no projeto.
+    @Column(nullable = false) //aqui seria o joincolumn para a entidade cliente, mas como nao existe, deixei apenas a coluna.
     private Long clienteId;
 
     @Column(name = "data_inicio_reserva", nullable = false)
@@ -39,6 +40,7 @@ public class Reserva {
     private EnumStatusAgendamento statusAgendamento;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "sala_id", nullable = false)
     private Sala sala;
 

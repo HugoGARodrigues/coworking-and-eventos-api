@@ -26,7 +26,9 @@ public class SalaServiceImpl implements SalaService {
         return salaRepository.findByTipoSala(tipoSala);
     }
 
-    
+    @Override
+    public Sala buscarSalaPorId(Long id) throws Exception {
+        return salaRepository.findById(id).orElseThrow(() -> new Exception("Sala não encontrada com o ID: " + id));
+    }
 
-    
 }

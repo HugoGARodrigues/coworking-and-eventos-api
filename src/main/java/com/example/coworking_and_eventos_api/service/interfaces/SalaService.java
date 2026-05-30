@@ -10,5 +10,7 @@ public interface SalaService {
     public Sala criarSala(Sala sala);
 
     public List<Sala> listarSalas(EnumTipoSala tipoSala);
+
+    public Sala buscarSalaPorId(Long id) throws Exception;
     
 }
