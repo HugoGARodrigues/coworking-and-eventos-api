@@ -3,6 +3,7 @@ package com.example.coworking_and_eventos_api.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,5 +32,13 @@ public class ReservaRest {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ReservaRestFactory.getResponseDTO(reservaService.cadastrarReserva(ReservaRestFactory.getEntity(reservaDTO), salaId)));
     }
+
+    @PostMapping("deletar-reserva/{idReserva}")
+    public ResponseEntity<ReservaResponseDTO> cancelarReserva(@PathVariable Long idReserva) {
+        
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ReservaRestFactory.getResponseDTO(reservaService.cancelarReserva(idReserva)));
+    }
+    
     
 }
