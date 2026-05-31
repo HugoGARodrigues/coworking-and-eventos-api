@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.coworking_and_eventos_api.entity.Sala;
 import com.example.coworking_and_eventos_api.rest.dto.request.SalaRequestDTO;
+import com.example.coworking_and_eventos_api.rest.dto.response.SalaHorariosLivresResponseDTO;
 import com.example.coworking_and_eventos_api.rest.dto.response.SalaResponseDTO;
 import com.example.coworking_and_eventos_api.rest.factory.SalaRestFactory;
 import com.example.coworking_and_eventos_api.service.interfaces.SalaService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 
 @RequestMapping("/salas")
@@ -38,15 +41,27 @@ public class SalaRest {
     }
 
     @Operation(summary = "Listar salas", description = "Endpoint para listar salas por dia")
-    @PostMapping("/listar-salas-por-dia")
-    public ResponseEntity<Page<SalaResponseDTO>> listarSalas(@RequestParam LocalDateTime data,
-                                                       @RequestParam Integer paginaAtual,
-                                                       @RequestParam Integer tamanhoPagina,
-                                                       @RequestParam String direcao,
-                                                       @RequestParam String ordenacao) throws Exception {
+    @GetMapping("/consulta-agenda-diaria-paginado")
+    public ResponseEntity<Page<SalaResponseDTO>> listarAgendaDiaria(@RequestParam LocalDateTime data,
+                                                       @RequestParam(required = false, defaultValue = "0") Integer paginaAtual,
+                                                       @RequestParam(required = false, defaultValue = "10") Integer tamanhoPagina,
+                                                       @RequestParam(required = false, defaultValue = "ASC") String direcao,
+                                                       @RequestParam(required = false, defaultValue = "nome") String ordenacao) throws Exception {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SalaRestFactory.fromPageEntityToPageDTO(salaService.listarAgendaDiaria(data, paginaAtual, tamanhoPagina, direcao, ordenacao)));
     }
+
+    @Operation(summary = "Listar salas", description = "Endpoint para listar salas por tipo")
+    @GetMapping("lista-paginada-horario-disponivel")
+    public ResponseEntity<Page<SalaHorariosLivresResponseDTO>> listarSalasLivresPorDia(@RequestParam LocalDateTime data,
+                                                       @RequestParam(required = false, defaultValue = "0") Integer paginaAtual,
+                                                       @RequestParam(required = false, defaultValue = "10") Integer tamanhoPagina,
+                                                       @RequestParam(required = false, defaultValue = "ASC") String direcao,
+                                                       @RequestParam(required = false, defaultValue = "nome") String ordenacao) throws Exception {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(salaService.listarSalasEHorariosDisponiveis(data, paginaAtual, tamanhoPagina, direcao, ordenacao));
+    }
+    
 
 
 

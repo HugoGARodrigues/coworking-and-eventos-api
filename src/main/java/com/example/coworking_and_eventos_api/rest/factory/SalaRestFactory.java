@@ -28,13 +28,8 @@ public class SalaRestFactory {
         dto.setNome(sala.getNome());
         dto.setCapacidade(sala.getCapacidade());
         dto.setTipoSala(sala.getTipoSala());
+        dto.setReservas(sala.getReservas());
         
-        if (sala.getReservas() != null) {
-            List<Reserva> reservasAgendadas = sala.getReservas().stream()
-                    .filter(reserva -> reserva.getStatusAgendamento() == EnumStatusAgendamento.AGENDADO)
-                    .collect(Collectors.toList());
-            dto.setReservas(reservasAgendadas);
-        }
         
         return dto;
     }

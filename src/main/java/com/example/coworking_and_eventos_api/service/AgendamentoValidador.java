@@ -40,6 +40,12 @@ public class AgendamentoValidador {
         }
     }
 
+    public void validaAluguelNoPassado(LocalDateTime dataInicio) {
+        if (dataInicio.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("O aluguel não pode ser agendado para uma data e hora no passado.");
+        }
+    }
+
     public void validaConflitoReservas(Reserva novaReserva) {
         Long salaId = novaReserva.getSala().getId();
         LocalDateTime inicioDiaNovaReserva = novaReserva.getDataInicioReserva().toLocalDate().atStartOfDay();

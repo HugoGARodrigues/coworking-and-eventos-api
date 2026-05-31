@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.example.coworking_and_eventos_api.entity.Reserva;
 import com.example.coworking_and_eventos_api.entity.Sala;
 import com.example.coworking_and_eventos_api.enums.EnumTipoSala;
+import com.example.coworking_and_eventos_api.rest.dto.response.SalaHorariosLivresResponseDTO;
 
 public interface SalaService {
 
@@ -17,4 +19,8 @@ public interface SalaService {
     public Sala buscarSalaPorId(Long id) throws Exception;
 
     public Page<Sala> listarAgendaDiaria(LocalDateTime data, Integer paginaAtual, Integer tamanhoPagina, String direcao, String ordenacao);
+    
+    public Page<SalaHorariosLivresResponseDTO> listarSalasEHorariosDisponiveis(LocalDateTime data, Integer paginaAtual, Integer tamanhoPagina, String direcao, String ordenacao);
+
+    public boolean isSlotConflitante(String slot, List<Reserva> reservas);
 }
