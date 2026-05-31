@@ -18,15 +18,19 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
     public List<Sala> findByTipoSala(EnumTipoSala tipoSala);
 
     @Query("SELECT DISTINCT s FROM Sala s " +
-           "JOIN s.reservas r " +
-           "WHERE r.dataInicioReserva >= :dataInicio " +
+           "LEFT JOIN s.reservas r " +
+           "WHERE (r IS NULL OR (r.dataInicioReserva >= :dataInicio " +
            "AND r.dataInicioReserva <= :dataFim " +
-           "AND r.statusAgendamento = 'AGENDADO'"
+           "AND r.statusAgendamento = 'AGENDADO')) " +
+           "AND (:filtro IS NULL OR lower(s.nome) LIKE lower(concat('%', :filtro, '%')))"
            )
     public Page<Sala> listarPaginadoComFiltroDeDiaDaReserva(@Param("dataInicio") LocalDateTime dataInicio, 
                                                             @Param("dataFim") LocalDateTime dataFim,
+                                                            @Param("filtro") String filtro,
                                                             Pageable pageable);
 
+
+       public Sala findByNome(String nome);
     
     
 }

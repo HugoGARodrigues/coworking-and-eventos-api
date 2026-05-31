@@ -18,9 +18,19 @@ public interface SalaService {
 
     public Sala buscarSalaPorId(Long id) throws Exception;
 
-    public Page<Sala> listarAgendaDiaria(LocalDateTime data, Integer paginaAtual, Integer tamanhoPagina, String direcao, String ordenacao);
+    public Page<Sala> listarAgendaDiaria(LocalDateTime data, String nomeSala , Integer paginaAtual, Integer tamanhoPagina, String direcao,
+                                         String ordenacao);
     
     public Page<SalaHorariosLivresResponseDTO> listarSalasEHorariosDisponiveis(LocalDateTime data, Integer paginaAtual, Integer tamanhoPagina, String direcao, String ordenacao);
 
     public boolean isSlotConflitante(String slot, List<Reserva> reservas);
+
+    public void nomeSalaIgualValidador(Sala sala);
+
+    public void deletarSala(Long id) throws Exception;
+
+    public Page<Sala> listarTodasAsSalas(String nomeString, Integer paginaAtual, Integer tamanhoPagina, String direcao,
+                                         String ordenacao) throws Exception;
+
+    public Sala editarSala(Sala sala) throws Exception;
 }

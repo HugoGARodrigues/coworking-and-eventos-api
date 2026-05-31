@@ -38,5 +38,6 @@ public class SalaRestFactory {
         List<SalaResponseDTO> dtos = salas.map(sala -> getResponseDTO(sala)).getContent();
         return new PageImpl<>(dtos, salas.getPageable(), salas.getTotalElements());
     }
+    
 
 }

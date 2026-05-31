@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.coworking_and_eventos_api.CoworkingAndEventosApiApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.336 s -- in com.example.coworking_and_eventos_api.CoworkingAndEventosApiApplicationTests

@@ -1,0 +1,12 @@
+com\example\coworking_and_eventos_api\rest\SalaRestTest.class
+com\example\coworking_and_eventos_api\rest\ReservaRestTest.class
+com\example\coworking_and_eventos_api\repository\SalaRepositoryTest.class
+com\example\coworking_and_eventos_api\entity\ReservaTest.class
+com\example\coworking_and_eventos_api\entity\SalaTest.class
+com\example\coworking_and_eventos_api\repository\ReservaRepositoryTest.class
+com\example\coworking_and_eventos_api\service\ReservaServiceImplTest.class
+com\example\coworking_and_eventos_api\factory\ReservaRestFactoryTest.class
+com\example\coworking_and_eventos_api\factory\SalaRestFactoryTest.class
+com\example\coworking_and_eventos_api\service\SalaServiceImplTest.class
+com\example\coworking_and_eventos_api\service\AgendamentoValidadorTest.class
+com\example\coworking_and_eventos_api\CoworkingAndEventosApiApplicationTests.class

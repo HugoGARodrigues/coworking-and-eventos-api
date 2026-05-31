@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.example.coworking_and_eventos_api.enums.EnumTipoSala;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

@@ -1,6 +1,5 @@
 package com.example.coworking_and_eventos_api.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -10,7 +9,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.time.temporal.ChronoUnit;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,7 +20,6 @@ import com.example.coworking_and_eventos_api.entity.Reserva;
 import com.example.coworking_and_eventos_api.entity.Sala;
 import com.example.coworking_and_eventos_api.enums.EnumTipoSala;
 import com.example.coworking_and_eventos_api.repository.SalaRepository;
-import com.example.coworking_and_eventos_api.repository.ReservaRepository;
 import com.example.coworking_and_eventos_api.rest.dto.response.SalaHorariosLivresResponseDTO;
 import com.example.coworking_and_eventos_api.service.interfaces.ReservaService;
 import com.example.coworking_and_eventos_api.service.interfaces.SalaService;
@@ -30,11 +27,13 @@ import com.example.coworking_and_eventos_api.service.interfaces.SalaService;
 @Service
 public class SalaServiceImpl implements SalaService {
 
-    @Autowired
-    private SalaRepository salaRepository;
+    private final SalaRepository salaRepository;
+    private final ReservaService reservaService;
 
-    @Autowired
-    private ReservaService reservaService;
+    public SalaServiceImpl(SalaRepository salaRepository, @Lazy ReservaService reservaService) {
+        this.salaRepository = salaRepository;
+        this.reservaService = reservaService;
+    }
 
     private static final List<String> GRADE_HORARIOS_PADRAO = Arrays.asList(
         "08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00",
@@ -58,13 +57,13 @@ public class SalaServiceImpl implements SalaService {
     }
 
      @Override
-    public Page<Sala> listarAgendaDiaria(LocalDateTime data, Integer paginaAtual, Integer tamanhoPagina, String direcao,
+    public Page<Sala> listarAgendaDiaria(LocalDateTime data, String nomeSala , Integer paginaAtual, Integer tamanhoPagina, String direcao,
                                          String ordenacao){
         LocalDateTime inicioDiaNovaReserva = data.toLocalDate().atStartOfDay();
         LocalDateTime fimDiaNovaReserva = data.toLocalDate().atTime(LocalTime.MAX);
         Sort sort = Sort.by(Sort.Direction.fromString(direcao), ordenacao);
         PageRequest pageable = PageRequest.of(paginaAtual, tamanhoPagina, sort);
-        Page<Sala> salaPaginado = salaRepository.listarPaginadoComFiltroDeDiaDaReserva(inicioDiaNovaReserva, fimDiaNovaReserva, pageable);
+        Page<Sala> salaPaginado = salaRepository.listarPaginadoComFiltroDeDiaDaReserva(inicioDiaNovaReserva, fimDiaNovaReserva, nomeSala, pageable);
         for (Sala sala : salaPaginado) {
             List<Reserva> reservasDaSala = reservaService.listarReservasPorSalaEDia(sala.getId(), inicioDiaNovaReserva, fimDiaNovaReserva);
             sala.setReservas(reservasDaSala);
@@ -116,5 +115,40 @@ public class SalaServiceImpl implements SalaService {
         });
     }
 
+    @Override
+    public void nomeSalaIgualValidador(Sala sala) {
+        Sala salaExistente = salaRepository.findByNome(sala.getNome());
+        if (salaExistente != null) {
+            throw new IllegalArgumentException("Já existe uma sala com o nome: " + sala.getNome());
+        }
+
+    }
+
+    @Override
+    public void deletarSala(Long id) throws Exception {
+        Sala sala = buscarSalaPorId(id);
+        salaRepository.delete(sala);
+    }
+
+    @Override
+    public Page<Sala> listarTodasAsSalas(String filtroNome, Integer paginaAtual, Integer tamanhoPagina, String direcao,
+                                         String ordenacao) throws Exception {
+                                            Sort sort = Sort.by(Sort.Direction.fromString(direcao), ordenacao);
+        PageRequest pageable = PageRequest.of(paginaAtual, tamanhoPagina, sort);
+        Page<Sala> salas = salaRepository.listarPaginadoComFiltroDeDiaDaReserva(null, null, filtroNome, pageable);
+        return salas;
+    }
+
+    @Override
+    public Sala editarSala(Sala sala) throws Exception {
+        Sala salaExistente = buscarSalaPorId(sala.getId());
+        if (salaExistente == null) {
+            throw new Exception("Sala não encontrada com o ID: " + sala.getId());
+        }
+        salaExistente.setNome(sala.getNome());
+        salaExistente.setCapacidade(sala.getCapacidade());
+        salaExistente.setTipoSala(sala.getTipoSala());
+        return salaRepository.save(salaExistente);
+    }
 
 }

@@ -26,8 +26,8 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //@ManyToOne(fetch = FetchType.LAZY), @JoinColumn(name = "cliente_id", nullable = false), apenas para efeito de mock, ja que nao existe a entidade cliente no projeto.
-    @Column(nullable = false) //aqui seria o joincolumn para a entidade cliente, mas como nao existe, deixei apenas a coluna.
-    private Long clienteId;
+    //@Column(nullable = false) //aqui seria o joincolumn para a entidade cliente, mas como nao existe, deixei apenas a coluna.
+    //private Long clienteId;
 
     @Column(name = "data_inicio_reserva", nullable = false)
     private LocalDateTime dataInicioReserva;
@@ -39,7 +39,7 @@ public class Reserva {
     @Column(name = "status_agendamento", nullable = false)
     private EnumStatusAgendamento statusAgendamento;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
     @JoinColumn(name = "sala_id", nullable = false)
     private Sala sala;
@@ -49,7 +49,6 @@ public class Reserva {
 
     public Reserva(Long id, Long clienteId, LocalDateTime dataInicioReserva, LocalDateTime dataFimReserva, Sala sala) {
         this.id = id;
-        this.clienteId = clienteId;
         this.dataInicioReserva = dataInicioReserva;
         this.dataFimReserva = dataFimReserva;
         this.sala = sala;
@@ -61,14 +60,6 @@ public class Reserva {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getClienteId() {
-        return clienteId;
-    }
-
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
     }
 
     public LocalDateTime getDataInicioReserva() {

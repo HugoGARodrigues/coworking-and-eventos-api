@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +19,14 @@ import com.example.coworking_and_eventos_api.service.interfaces.ReservaService;
 @Service
 public class ReservaServiceImpl implements ReservaService {
 
-    @Autowired
-    private ReservaRepository reservaRepository;
+    private final ReservaRepository reservaRepository;
 
-    @Autowired
-    private AgendamentoValidador agendamentoValidador;
+    private final AgendamentoValidador agendamentoValidador;
+
+    public ReservaServiceImpl(ReservaRepository reservaRepository, AgendamentoValidador agendamentoValidador) {
+        this.reservaRepository = reservaRepository;
+        this.agendamentoValidador = agendamentoValidador;
+    }
 
     @Override
     @Transactional
@@ -57,6 +63,37 @@ public class ReservaServiceImpl implements ReservaService {
     public List<Reserva> listarReservasPorSalaEDia(Long idSala, LocalDateTime dataInicio, LocalDateTime dataFim) {
         
         return reservaRepository.buscarReservasPorIntervaloAndStatusAgendado(idSala, dataInicio, dataFim);
+    }
+
+    @Override
+    public Page<Reserva> listarReservasPorSalaEDiaPaginada(Long idSala, EnumStatusAgendamento status, Integer paginaAtual, Integer tamanhoPagina, String direcao,
+                                                           String ordenacao) {
+        Sort sort = Sort.by(Sort.Direction.fromString(direcao), ordenacao);
+        PageRequest pageable = PageRequest.of(paginaAtual, tamanhoPagina, sort);
+        return reservaRepository.buscarReservasPorIntervaloAndStatus(idSala, status, pageable);
+    }
+
+    @Override
+    public Reserva editarReserva(Long idReserva, Reserva reservaAtualizada) throws Exception {
+
+        Reserva reservaExistente = reservaRepository.findById(idReserva)
+                .orElseThrow(() -> new IllegalArgumentException("Reserva não encontrada com o ID: " + idReserva));
+
+        if(reservaExistente.getStatusAgendamento() == EnumStatusAgendamento.CANCELADO) {
+            throw new IllegalStateException("Não é possível editar uma reserva cancelada.");
+        }
+        
+        agendamentoValidador.validaAluguelNoPadraoDosSlots(reservaAtualizada.getDataInicioReserva().toLocalTime(), reservaAtualizada.getDataFimReserva().toLocalTime());
+        agendamentoValidador.validaTerminoAnteriorAoInicio(reservaAtualizada.getDataInicioReserva().toLocalTime(), reservaAtualizada.getDataFimReserva().toLocalTime());
+        agendamentoValidador.validaTempoMinimo(reservaAtualizada.getDataInicioReserva().toLocalTime(), reservaAtualizada.getDataFimReserva().toLocalTime());
+        agendamentoValidador.validaHorarioComercial(reservaAtualizada.getDataInicioReserva().toLocalTime(), reservaAtualizada.getDataFimReserva().toLocalTime());
+
+        agendamentoValidador.validaConflitoReservas(reservaAtualizada);
+        agendamentoValidador.validaAluguelNoPassado(reservaAtualizada.getDataInicioReserva());
+
+        reservaExistente.setDataInicioReserva(reservaAtualizada.getDataInicioReserva());
+        reservaExistente.setDataFimReserva(reservaAtualizada.getDataFimReserva());
+        return reservaRepository.save(reservaExistente);
     }
 
     

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.coworking_and_eventos_api.rest.SalaRestTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.312 s -- in com.example.coworking_and_eventos_api.rest.SalaRestTest

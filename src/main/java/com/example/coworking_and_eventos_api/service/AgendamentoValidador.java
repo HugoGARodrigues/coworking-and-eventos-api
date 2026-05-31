@@ -3,6 +3,7 @@ package com.example.coworking_and_eventos_api.service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,18 @@ import com.example.coworking_and_eventos_api.repository.ReservaRepository;
 @Service
 public class AgendamentoValidador {
 
-    @Autowired
-    private ReservaRepository reservaRepository;
+    private static final List<String> GRADE_HORARIOS_PADRAO = Arrays.asList(
+        "08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00",
+        "12:00 - 13:00", "13:00 - 14:00", "14:00 - 15:00", "15:00 - 16:00",
+        "16:00 - 17:00", "17:00 - 18:00"
+    );
+
+    
+    private final ReservaRepository reservaRepository;
+
+    public AgendamentoValidador(ReservaRepository reservaRepository) {
+        this.reservaRepository = reservaRepository;
+    }
 
     private static final Duration TEMPO_MINIMO = Duration.ofHours(1);
     private static final LocalTime INICIO_HORARIO_COMERCIAL = LocalTime.of(8, 0);
@@ -43,6 +54,13 @@ public class AgendamentoValidador {
     public void validaAluguelNoPassado(LocalDateTime dataInicio) {
         if (dataInicio.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("O aluguel não pode ser agendado para uma data e hora no passado.");
+        }
+    }
+
+    public void validaAluguelNoPadraoDosSlots(LocalTime inicio, LocalTime fim) {
+        String slot = String.format("%02d:%02d - %02d:%02d", inicio.getHour(), inicio.getMinute(), fim.getHour(), fim.getMinute());
+        if (!GRADE_HORARIOS_PADRAO.contains(slot)) {
+            throw new IllegalArgumentException("O aluguel deve estar dentro dos slots de horários pré-definidos.");
         }
     }
 
